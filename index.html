@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Search Engine</title>
+    <style>
+        body {
+            background-color: #1E1338;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center; /* Center text */
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-image: url('bg.png'); /* Replace with your image URL */
+            background-size: cover;
+            filter: blur(5px); /* Adjust blur level */
+            z-index: -1; /* Send background to back */
+        }
+		
+		
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+        }
+		
+		
+        .searchengine {
+            position: relative;
+            display: inline-block;
+            text-align: center; /* Center text in the searchengine */
+        }
+        .searchengine-content {
+            display: none;
+            position: absolute;
+					border-radius: 10px;
+            background-color: #ffffffdd;
+			/* background-color: #ccdfffdd; */
+            box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.2);
+            min-width: 160px;
+            border: 2px solid #256ad8;
+            z-index: 1;
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%) translateY(5%); /* Adjust for centering */
+        }
+        .searchengine-content div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .searchengine-content div:hover {
+		font-weight: bold;
+				border-radius: 10px;
+            //background-color: #ccddff;
+            background-color: #ffffffcc;
+			box-shadow: 0px 0px 16px 0px rgba(0, 80, 200, 0.3)
+        }
+		
+		        .searchengine:hover .searchengine-content {
+            display: block; /* Show searchengine on hover */
+        }
+		
+		
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center buttons */
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4285F4;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+        h1 {
+            color: white;
+            text-shadow: 0px 0px 5px #777777; /* Outline effect */
+            font-size: xxx-large;
+            user-select: none;
+        }
+        .search-container {
+            display: flex;
+            align-items: center; /* Align items vertically */
+            gap: 4px; /* Space between elements */
+        }
+		
+		
+        .autocomplete-suggestions {
+            position: absolute;
+            background-color: #ffffffdd;
+			font-size: small;
+			color: #777;
+            border: 1px solid #ddd;
+            z-index: 1000;
+            width: 300px; /* Match input width */
+            max-height: 150px; /* Limit height */
+            overflow-y: auto; /* Allow scrolling */
+            display: none; /* Hidden by default */
+			text-align: left; /* Ensure text is left-aligned */
+        }
+        .autocomplete-suggestions div {
+            padding: 4px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestions div:hover {
+            background-color: #fff;
+        }
+        .active {
+            background-color: #b1c1d1; /* Highlight active suggestion */
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div>
+        <h1 id="searchTitle"></h1>
+        <div class="search-container">
+            <input type="text" id="searchQuery" placeholder="Enter your search term" onkeypress="checkEnter(event)" oninput="showSuggestions(event)" onkeydown="handleKeyDown(event)" onfocus="showSuggestions(event)">
+            <div style="margin: 0px 0px 10px 0px; color: white;">
+                <div style="font-weight: 500;" class="searchengine">
+                    <button style="font-weight: 500;" onclick="search()">
+                        <div id="selectedEngine" onclick="togglesearchengine()">Select Search Engine</div>
+                        <div class="searchengine-content">
+                            <div style="color: #111111;" onclick="setEngine('https://www.google.com/search?q=', 'Google')">Google</div>
+                            <div style="color: #FF5511;" onclick="setEngine('https://duckduckgo.com/?q=', 'DuckDuckGo')">DuckDuckGo</div>
+                            <div style="color: #111111;" onclick="setEngine('https://www.qwant.com/?q=', 'Qwant')">Qwant</div>
+							<div style="color: #113399;" onclick="setEngine('https://en.bab.la/dictionary/polish-english/', 'bab.la')">bab.la</div>
+							<div style="color: #EE1111;" onclick="setEngine('https://www.youtube.com/results?search_query=', 'YouTube')">YouTube</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="suggestions" class="autocomplete-suggestions"></div>
+    </div>
+
+    <script>
+
+        const maxHistory = 16;
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        let currentSuggestionIndex = -1; // Track the currently selected suggestion
+
+        // Function to randomize the colors of each letter in the title
+        function setRandomColors() {
+            const title = "Spirit Search";
+            const titleElement = document.getElementById('searchTitle');
+            titleElement.innerHTML = ''; // Clear existing content
+
+			// colors packs
+			var colorid = 0;
+			const colorPack = ['#bbccdd', '#333', '#333', '#333', '#333', '#333'];
+			const colorPack2 = ['#336699', '#ee0000', '#FF3F6C'];
+            // Shuffle colors
+            const shuffledColors = [...colorPack].sort(() => Math.random() - 0.5);
+
+            // Use each color at least once for the title
+            for (let i = 0; i < title.length; i++) {
+                const span = document.createElement('span');
+                span.textContent = title[i];
+                if (i < 16) 
+				{
+					colorid = i % shuffledColors.length;
+					span.style.color = shuffledColors[colorid]; // Cycle through shuffled colors
+					span.style.color = shuffledColors[colorid]; // Cycle through shuffled colors
+					if (shuffledColors[colorid] == '#bbccdd') span.style.textShadow = '0px 0px 5px #ffffff';
+				}
+                else
+					span.style.color = colorPack2[0];
+
+                titleElement.appendChild(span);
+            }
+        }
+
+        let selectedEngineUrl = 'https://www.google.com/search?q='; // Default engine
+
+        function togglesearchengine() {
+            const searchengineDiv = document.querySelector('.searchengine-content');
+            searchengineDiv.style.display = (searchengineDiv.style.display === 'block') ? 'none' : 'block';
+			
+
+        }
+
+        function setEngine(url, name) {
+            selectedEngineUrl = url;
+            document.getElementById('selectedEngine').textContent = name;
+            localStorage.setItem('searchEngine', url);
+            search(); // Automatically search when an engine is selected
+        }
+
+        // Load the saved search engine and input value from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedEngine = localStorage.getItem('searchEngine');
+            const savedQuery = localStorage.getItem('searchQuery');
+
+if (savedEngine) {
+    selectedEngineUrl = savedEngine;
+
+    let engineName;
+    switch (true) {
+        case savedEngine.includes('google'):
+            engineName = 'Google';
+            break;
+        case savedEngine.includes('duckduckgo'):
+            engineName = 'DuckDuckGo';
+            break;
+        case savedEngine.includes('qwant'):
+            engineName = 'Qwant';
+            break;
+		case savedEngine.includes('bab.la'):
+            engineName = 'bab.la';
+            break;
+		case savedEngine.includes('youtube'):
+            engineName = 'YouTube';
+            break;
+        default:
+            engineName = 'Nieznana wyszukiwarka';
+    }
+
+    document.getElementById('selectedEngine').textContent = engineName;
+}
+
+            if (savedQuery) {
+                document.getElementById('searchQuery').value = savedQuery; // Restore the input value
+            }
+            document.getElementById('searchQuery').focus(); // Set focus on the input box
+            document.getElementById('searchQuery').select(); // Select all text in the input box
+            setRandomColors(); // Set random colors for the title
+            showSuggestions(); // Show similar items on load
+							           
+        });
+
+        function highlightMatches(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi'); // Case insensitive match
+            return text.replace(regex, '<span style="color: #000; font-weight: normal;">$1</span>');
+        }
+
+        function loadHistory(query = '') {
+            const suggestionsDiv = document.getElementById('suggestions');
+            suggestionsDiv.innerHTML = ''; // Clear previous suggestions
+
+            const filteredHistory = searchHistory.filter(entry => entry.toLowerCase().includes(query.toLowerCase()));
+            filteredHistory.forEach(entry => {
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.textContent = entry;
+                suggestionDiv.onclick = () => selectSuggestion(entry);
+                suggestionsDiv.appendChild(suggestionDiv);
+            });
+
+        }
+
+        function showSuggestions(event) {
+            const query = document.getElementById('searchQuery').value;
+            const suggestionsDiv = document.getElementById('suggestions');
+            suggestionsDiv.innerHTML = ''; // Clear previous suggestions
+            currentSuggestionIndex = -1; // Reset index
+			  
+		   // if (query) { //show me all history here
+                const filteredHistory = searchHistory.filter(entry => entry.toLowerCase().includes(query.toLowerCase()));
+                filteredHistory.forEach(entry => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.innerHTML = highlightMatches(entry, query); // Highlight matches
+                    suggestionDiv.onclick = () => selectSuggestion(entry);
+                    suggestionsDiv.appendChild(suggestionDiv);
+                });
+								
+                //suggestionsDiv.style.display = filteredHistory.length ? 'block' : 'none'; // Show or hide suggestions
+            //} else {
+                //suggestionsDiv.style.display = 'none'; // Hide if input is empty
+            //}
+			//loadHistory(); // Load search history
+			//if (searchengineDiv.style.display === 'block') {
+			//	suggestionsDiv.style.display = 'none';
+			//}
+
+			if (!filteredHistory.length && query) {suggestionsDiv.style.display = 'none'; } // na bieżąco
+            // Always show suggestions when input is focused
+            //suggestionsDiv.style.display = 'block';
+        }
+
+        function selectSuggestion(entry) {
+            document.getElementById('searchQuery').value = entry; // Set the input to the selected suggestion
+            document.getElementById('suggestions').style.display = 'none'; // Hide suggestions
+			document.getElementById('searchQuery').focus(); // Set focus on the input box
+
+        }
+
+        function search() {
+            const query = document.getElementById('searchQuery').value;
+            if (query) {
+                // Add to history if not already present
+                if (!searchHistory.includes(query)) {
+                    searchHistory.push(query);
+                    if (searchHistory.length > maxHistory) {
+                        searchHistory.shift(); // Remove the oldest entry
+                    }
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistory)); // Save history to localStorage
+                }
+            }
+            localStorage.setItem('searchQuery', query); // Store the input value
+            const url = selectedEngineUrl + encodeURIComponent(query);
+            window.location.href = url; // Change to the same page
+        }
+
+        function handleKeyDown(event) {
+            const suggestions = document.querySelectorAll('.autocomplete-suggestions div');
+			
+			//const searchengineDiv = document.querySelector('.searchengine-content');
+			//if (searchengineDiv.style.display === 'block')
+			{
+            if (event.key === 'Enter') {
+                if (currentSuggestionIndex > -1) {
+                    selectSuggestion(suggestions[currentSuggestionIndex].textContent); // Select highlighted suggestion
+                } else {
+                    search(); // Perform search if no suggestion is highlighted
+                }
+            } else if (event.key === 'ArrowDown') {
+                if (suggestions.length > 0 && currentSuggestionIndex < suggestions.length - 1) {
+                    currentSuggestionIndex++;
+                    updateSuggestionHighlight(suggestions);
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (suggestions.length > 0 && currentSuggestionIndex > 0) {
+                    currentSuggestionIndex--;
+                    updateSuggestionHighlight(suggestions);
+                }
+            }
+			}
+        }
+
+        function updateSuggestionHighlight(suggestions) {
+            suggestions.forEach((suggestion, index) => {
+                suggestion.classList.remove('active');
+                if (index === currentSuggestionIndex) {
+                    suggestion.classList.add('active');
+                    document.getElementById('searchQuery').value = suggestion.textContent; // Update input value
+                }
+            });
+        }
+
+        // Hide suggestions if clicked outside na kliknięcie
+        document.addEventListener('click', (event) => {
+            const suggestionsDiv = document.getElementById('suggestions');
+            const searchQuery = document.getElementById('searchQuery');
+            if (!suggestionsDiv.contains(event.target) && event.target !== searchQuery) {
+                suggestionsDiv.style.display = 'none'; // Hide suggestions
+            }
+			
+			const query = document.getElementById('searchQuery').value;
+			const filteredHistory = searchHistory.filter(entry => entry.toLowerCase().includes(query.toLowerCase()));
+			if (!filteredHistory.length && query) {suggestionsDiv.style.display = 'none'; }
+        
+        });
+		
+		// Switch the history on click on the query box
+		document.getElementById('searchQuery').addEventListener('click', function() {			
+		const suggestionsDiv = document.getElementById('suggestions');
+		suggestionsDiv.style.display = (suggestionsDiv.style.display === 'block') ? 'none' : 'block';
+
+		});
+		
+    </script>
+</body>
+</html>
