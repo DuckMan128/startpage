@@ -12,7 +12,7 @@ In short:
 
 • you can copy/modify/restore (menu options below) or remove (drag right) search engines and other menu items
 
-• the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed, so if you want to search for pictures or video or web, it works for any other search engine if it aalows to search this kind of search.
+• the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed, so if you want to search for pictures or video or web, it works for any other search engine if it allows to search selected kind of search.
 
 • bookmarks on the sides do not take space
 
