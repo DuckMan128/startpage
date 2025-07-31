@@ -13,7 +13,7 @@ In short:
 
 SEARCH:
 
-• you have smart autocomplete list, which will display all display the repetitive pharses in intuitive boxes
+• you have autocomplete list, which will display all repetitive pharses in intuitive boxes
 
 • you can very easily switch to another search engine
 
