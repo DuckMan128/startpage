@@ -2,15 +2,20 @@
 Hi. My name is Thomas. The "guiding spirit" multisearch startpage is my project I recently was creating.
 
 
-The innovation is that you have options usual search engine has (search date, language, type like web, images, videos), but it is universal.
+The innovation is that you have options usual search engine has (search date, language, type like web, images, videos), but it is universal!
 
 The goal was to: Unificate as many options as possible many search enginess have in common into one site with better settings management and customisation and minimise clicking to save time.
 
 
 In short:
 
+MENUS:
+Menu of Search Engines, Languages and Themes are fully configurable.
+in Menu Lagguage: You can add your favorite item such as language commonly used or "Everything".
+By clicking the side button above the menu, you can quickly go to "Everything".
+• you can sort, copy/modify/restore (menu options below) or remove (drag right) menu items. Current menu position and menu items will be saved.
 
-• you can copy/modify/restore (menu options below) or remove (drag right) search engines and other menu items
+• You can add your own languages, other search engines and themes!
 
 • the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed, so if you want to search for pictures or video or web, it works for any other search engine if it allows to search selected kind of search.
 
@@ -26,18 +31,17 @@ In short:
 
 • you can create notes
 
-• you have time and weather for localisation you write
-
-• everything is stored in locals
-
-• you can sort, copy, delete or modify positions in menus. To delete just drag the item to the right
+• you have time and weather for region you want
 
 • below menu you have options to do the rest.
 
-• you can have as many wallpapers as you want, they will load one after another during your refresh or load the page
+• you can have as many wallpapers as you want (if locally or forked), they will load one after another during your refresh or load the page
+
+• everything is stored in locals
 
 
-Everything is configurable and created with heart of making searching proccess easy by minimise clicking.
+Included wallpapers are just templates.
+
 
 NOTE: Included backgrounds are just templates. The same for bookmarks.
 //edit: sorry for the wrong dosbox bookmark. I forgot to change the address inside. You can change yourself if you want
