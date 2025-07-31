@@ -70,4 +70,4 @@ Included wallpapers are just templates.
 
 
 NOTE: Included backgrounds are just templates. The same for bookmarks.
-//edit: sorry for the wrong dosbox bookmark. I forgot to change the address inside. You can change yourself if you want
+
