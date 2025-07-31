@@ -7,6 +7,7 @@ The innovation is that you have options usual search engine has (search date, la
 In short:
 
 • you can add/modify/remove search engines and other menu items
+
 • the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed
 • bookmarks on the sides do not take space
 • you can move bookmarks, from side to side and sort them
