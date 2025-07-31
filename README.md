@@ -11,6 +11,16 @@ In short:
 
 
 
+SEARCH:
+
+• you have smart autocomplete list, which will display all display the repetitive pharses in intuitive boxes
+
+• you can very easily switch to another search engine
+
+• you can set dat of search and kind for most of the search engines
+
+
+
 MENUS:
 
 • Menu of Search Engines, Languages and Themes are fully configurable.
@@ -24,11 +34,13 @@ MENUS:
 • You can add your own languages, other search engines and themes!
 
 
+
 EDITORS:
 
 • Search Engines, Languages and Themes are configurable and can be shared by exporting and importing. you can copy and edit new theme or reset whole list.
 
 • you can move bookmarks, from side to side and sort them
+
 
 
 WIDGETS:
