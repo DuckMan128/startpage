@@ -4,13 +4,15 @@ Hi. My name is Thomas. The "guiding spirit" multisearch startpage is my project 
 
 The innovation is that you have options usual search engine has (search date, language, type like web, images, videos), but it is universal.
 
+The goal was to: Unificate as many options as possible many search enginess have in common into one site with better settings management and customisation and minimise clicking to save time.
+
 
 In short:
 
 
-• you can add/modify/remove search engines and other menu items
+• you can copy/modify/restore (menu options below) or remove (drag right) search engines and other menu items
 
-• the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed
+• the type of search (toolbox) is unified for any available search engine, the panel can be dragged up and down if needed, so if you want to search for pictures or video or web, it works for any other search engine if it aalows to search this kind of search.
 
 • bookmarks on the sides do not take space
 
