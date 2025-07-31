@@ -13,11 +13,11 @@ In short:
 
 MENUS:
 
-Menu of Search Engines, Languages and Themes are fully configurable.
+• Menu of Search Engines, Languages and Themes are fully configurable.
 
-in Menu Lagguage: You can add your favorite item such as language commonly used or "Everything".
+• in Menu "Languages": You can add your favorite item such as language commonly used or "Everything".
 
-By clicking the side button above the menu, you can quickly go to "Everything".
+• by clicking the side button above the menu, you can quickly go to "Everything".
 
 • you can sort, copy/modify/restore (menu options below) or remove (drag right) menu items. Current menu position and menu items will be saved.
 
